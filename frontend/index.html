@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Items</h1>
+    <input id="itemInput" placeholder="Enter item" />
+    <button onclick="addItem()">Add</button>
+    <ul id="list"></ul>
+
+    <script>
+        async function fetchItems() {
+            const res = await fetch("http://localhost:5000/items");
+            const data = await res.json();
+            document.getElementById("list").innerHTML =
+                data.map(i => `<li>${i.name}</li>`).join("");
+        }
+
+        async function addItem() {
+            const val = document.getElementById("itemInput").value;
+            await fetch("http://localhost:5000/items", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: val })
+            });
+            fetchItems();
+        }
+
+        fetchItems();
+    </script>
+</body>
+
+</html>
